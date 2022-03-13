@@ -277,16 +277,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void dance_umlaut_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
         if (my_lshift_state.pressed) {
-            tap_code16(KC_LSFT);
-            register_code16(KC_P);
+            //tap_code16(KC_LSFT);
+            register_code16(S(KC_P));
         } else {
             register_code16(KC_P);
         }
     } else {
         if (my_lshift_state.pressed) {
             register_code16(KC_RALT);
-            tap_code16(KC_LSFT);
-            register_code16(KC_P);
+            //tap_code16(KC_LSFT);
+            register_code16(S(KC_P));
         } else {
             register_code16(KC_RALT);
             register_code16(KC_P);
@@ -297,16 +297,16 @@ void dance_umlaut_finished(qk_tap_dance_state_t *state, void *user_data) {
 void dance_umlaut_reset(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
         if (my_lshift_state.pressed) {
-            tap_code16(KC_LSFT);
-            unregister_code16(KC_P);
+            //tap_code16(KC_LSFT);
+            unregister_code16(S(RKC_P));
         } else {
             unregister_code16(KC_P);
         }
     } else {
         if (my_lshift_state.pressed) {
             unregister_code16(KC_RALT);
-            tap_code16(KC_LSFT);
-            unregister_code16(KC_P);
+            //tap_code16(KC_LSFT);
+            unregister_code16(S(KC_P));
         } else {
             unregister_code16(KC_RALT);
             unregister_code16(KC_P);
