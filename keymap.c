@@ -28,7 +28,10 @@ enum my_layers {
 
 // Custom Tapdance keycodes
 enum my_tap_dance {
-    TD_CT_CLN,
+    TD_A_UMLAUT,
+    TD_O_UMLAUT,
+    TD_U_UMLAUT,
+    TD_S_UMLAUT,
     TD_ESC_CAPS
 };
 
@@ -39,22 +42,16 @@ enum unicode_names {
     SNEK,
 };
 
-const uint32_t PROGMEM unicode_map[] = {
-    [BANG]  = 0x203D,  // ‽
-    [IRONY] = 0x2E2E,  // ⸮
-    [SNEK]  = 0x1F40D, // 🐍
-};
-
 // Holding information about a specific key state
 typedef struct my_custom_key_state
 {
-    uint16_t keycode;
+    uint16_t tracked_key;
     bool pressed;
 } my_key_state_t;
 
 
 // keys to track
-my_key_state_t my_lshift_state, my_rshift_state;
+my_key_state_t my_mod_key_state, my_normal_key;
 
 /*
 * Registered Keys
@@ -65,10 +62,40 @@ my_key_state_t my_lshift_state, my_rshift_state;
 #define TG_NUMP  TG(_NUMPAD)       // Toggle numpad layer
 
 // Tapdance definitions
+#define TYPING_TAP_TERM 275
+
 #define CTL_ESC TD(TD_ESC_CAPS)
-#define CT_CLN TD(TD_CT_CLN)
+#define A_UMLT TD(TD_A_UMLAUT)
+#define O_UMLT TD(TD_O_UMLAUT)
+#define U_UMLT TD(TD_U_UMLAUT)
+#define S_UMLT TD(TD_S_UMLAUT)
 
 
+/*
+* Maps
+*/
+
+// corresponding keycode map
+const uint16_t my_td_keycode_map[] = {
+    [A_UMLT] = KC_Q,
+    [O_UMLT] = KC_P,
+    [U_UMLT] = KC_Y,
+    [S_UMLT] = KC_S,
+};
+
+const uint16_t my_keycode_map[] = {
+    [KC_Q] = KC_A,
+    [KC_P] = KC_O,
+    [KC_Y] = KC_U,
+    [KC_S] = KC_S,
+};
+
+// unicode map
+const uint32_t PROGMEM unicode_map[] = {
+    [BANG]  = 0x203D,  // ‽
+    [IRONY] = 0x2E2E,  // ⸮
+    [SNEK]  = 0x1F40D, // 🐍
+};
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* QWERTY
      * ┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬────────────┬───────┐
@@ -95,8 +122,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [_QWERTY] = LAYOUT_65_ansi_blocker(
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_HOME,
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,
-        CTL_ESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    CT_CLN,  KC_QUOT,          KC_ENT,  KC_PGUP,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    U_UMLT,    KC_I,    O_UMLT,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,
+        CTL_ESC, A_UMLT,    S_UMLT,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_QUOT,          KC_ENT,  KC_PGUP,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,          KC_UP,   KC_PGDN,
         KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO_FUNC, KC_LEFT, KC_DOWN, KC_RGHT
     ),
@@ -180,22 +207,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
         case KC_LSFT:
-            my_lshift_state.keycode = keycode;
-
-            if (record->event.pressed) {
-                my_lshift_state.pressed = true;
-            } else {
-                my_lshift_state.pressed = false;
-            }
+            my_mod_key_state.tracked_key = keycode;
+            my_mod_key_state.pressed = record->event.pressed;
             return true;
         case KC_RSFT:
-            my_rshift_state.keycode = keycode;
-
-            if (record->event.pressed) {
-                my_rshift_state.pressed = true;
-            } else {
-                my_rshift_state.pressed = false;
-            }
+            my_mod_key_state.tracked_key = keycode;
+            my_mod_key_state.pressed = record->event.pressed;
             return true;
         case HK_COSL:
             clear_keyboard();
@@ -272,48 +289,50 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+/*
+* Tap Dance
+*/
 
-// Tap Dance
+// Umlaut
+void each_umlaut_tap(qk_tap_dance_state_t *state, void *user_data) {
+    my_normal_key.tracked_key = my_keycode_map[my_td_keycode_map[state->keycode]];
+}
+
 void dance_umlaut_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
-        if (my_lshift_state.pressed) {
-            //tap_code16(KC_LSFT);
-            register_code16(S(KC_P));
-        } else {
-            register_code16(KC_P);
+        if (my_mod_key_state.pressed && (my_mod_key_state.tracked_key == KC_LSFT || my_mod_key_state.tracked_key == KC_RSFT)) { 
+            register_code16(S(my_normal_key.tracked_key)); 
+        } else { 
+            register_code16(my_normal_key.tracked_key);
         }
     } else {
-        if (my_lshift_state.pressed) {
-            register_code16(KC_RALT);
-            //tap_code16(KC_LSFT);
-            register_code16(S(KC_P));
+        if (my_mod_key_state.pressed && (my_mod_key_state.tracked_key == KC_LSFT || my_mod_key_state.tracked_key == KC_RSFT)) { 
+            register_code16(S(RALT(my_td_keycode_map[state->keycode])));
         } else {
-            register_code16(KC_RALT);
-            register_code16(KC_P);
+            register_code16(RALT(my_td_keycode_map[state->keycode]));
         }
     }
 }
 
 void dance_umlaut_reset(qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        if (my_lshift_state.pressed) {
-            //tap_code16(KC_LSFT);
-            unregister_code16(S(RKC_P));
-        } else {
-            unregister_code16(KC_P);
+    if (state->count == 1) { 
+        if (my_mod_key_state.pressed && (my_mod_key_state.tracked_key == KC_LSFT || my_mod_key_state.tracked_key == KC_RSFT)) { 
+            unregister_code16(S(my_normal_key.tracked_key));
+        } else { 
+            unregister_code16(my_normal_key.tracked_key);
         }
     } else {
-        if (my_lshift_state.pressed) {
-            unregister_code16(KC_RALT);
-            //tap_code16(KC_LSFT);
-            unregister_code16(S(KC_P));
-        } else {
-            unregister_code16(KC_RALT);
-            unregister_code16(KC_P);
+        if (my_mod_key_state.pressed && (my_mod_key_state.tracked_key == KC_LSFT || my_mod_key_state.tracked_key == KC_RSFT)) { 
+            unregister_code16(S(RALT(my_td_keycode_map[state->keycode]))); 
+        } else { 
+            unregister_code16(RALT(my_td_keycode_map[state->keycode]));
         }
     }
 }
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_CT_CLN]   = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_umlaut_finished, dance_umlaut_reset),
-    [TD_ESC_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
+    [TD_A_UMLAUT]   = ACTION_TAP_DANCE_FN_ADVANCED_TIME(each_umlaut_tap, dance_umlaut_finished, dance_umlaut_reset, TYPING_TAP_TERM),
+    [TD_O_UMLAUT]   = ACTION_TAP_DANCE_FN_ADVANCED_TIME(each_umlaut_tap, dance_umlaut_finished, dance_umlaut_reset, TYPING_TAP_TERM),
+    [TD_U_UMLAUT]   = ACTION_TAP_DANCE_FN_ADVANCED_TIME(each_umlaut_tap, dance_umlaut_finished, dance_umlaut_reset, TYPING_TAP_TERM),
+    [TD_S_UMLAUT]   = ACTION_TAP_DANCE_FN_ADVANCED_TIME(each_umlaut_tap, dance_umlaut_finished, dance_umlaut_reset, TYPING_TAP_TERM),
+    [TD_ESC_CAPS]   = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
 };
