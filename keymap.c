@@ -4,10 +4,17 @@
 #include <string.h>
 
 /*
+* Constant
+*/
+
+#define DE_LAYOUT _GERMAN
+#define EN_LAYOUT _ENGLISH
+
+/*
 * Declarations
 */
 
-// Custom keycodes
+// Alt keycodes
 enum alt_keycodes {
     U_T_AUTO = SAFE_RANGE, //USB Extra Port Toggle Auto Detect / Always Active
     U_T_AGCR,              //USB Toggle Automatic GCR control
@@ -15,13 +22,20 @@ enum alt_keycodes {
     DBG_MTRX,              //DEBUG Toggle Matrix Prints
     DBG_KBD,               //DEBUG Toggle Keyboard Prints
     DBG_MOU,               //DEBUG Toggle Mouse Prints
-    HK_COSL,               // Clear held-down keys
+    HK_COSL,               //Clear held-down keys
     MD_BOOT,               //Restart into bootloader after hold timeout
+};
+
+// My Custom Keycodes
+enum my_custom_key_codes {
+    DEF_DE,                //Set german specific layer
+    DEF_EN,                //Set english specific layer
 };
 
 // Layers
 enum my_layers {
-    _QWERTY = 0,
+    EN_LAYOUT = 0,
+    DE_LAYOUT,
     _FUNCTION,
     _NUMPAD,
 };
@@ -58,8 +72,11 @@ my_key_state_t my_mod_key_state, my_normal_key;
 */
 
 // needs to be changed
-#define MO_FUNC  MO(_FUNCTION)     // Hold for function layer
-#define TG_NUMP  TG(_NUMPAD)       // Toggle numpad layer
+#define MO_FUNC MO(_FUNCTION)     // Hold for function layer
+#define TG_NUMP TG(_NUMPAD)       // Toggle numpad layer
+
+#define DEF_DE TO(DE_LAYOUT)
+#define DEF_EN TO(EN_LAYOUT)
 
 // Tapdance definitions
 #define TYPING_TAP_TERM 275
@@ -96,8 +113,16 @@ const uint32_t PROGMEM unicode_map[] = {
     [IRONY] = 0x2E2E,  // ⸮
     [SNEK]  = 0x1F40D, // 🐍
 };
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_QWERTY] = LAYOUT_65_ansi_blocker(
+    [EN_LAYOUT] = LAYOUT_65_ansi_blocker(
+        KC_GRV,  KC_1,      KC_2,       KC_3,    KC_4,    KC_5,    KC_6,    KC_7,     KC_8,    KC_9,      KC_0,     KC_MINS, KC_EQL,  KC_BSPC, KC_HOME,
+        KC_TAB,  KC_Q,      KC_W,       KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,     KC_I,    KC_O,      KC_P,     KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,
+        CTL_ESC, KC_A,      KC_S,       KC_D,    KC_F,    KC_G,    KC_H,    KC_J,     KC_K,    KC_L,      KC_SCLN,  KC_QUOT,          KC_ENT,  KC_PGUP,
+        KC_LSFT, KC_Z,      KC_X,       KC_C,    KC_V,    KC_B,    KC_N,    KC_M,     KC_COMM, KC_DOT,    KC_SLSH,  KC_RSFT,          KC_UP,   KC_PGDN,
+        KC_LCTL, KC_LGUI,   KC_LALT,                            KC_SPC,                        KC_RALT,   MO_FUNC,           KC_LEFT, KC_DOWN, KC_RGHT
+    ),
+    [DE_LAYOUT] = LAYOUT_65_ansi_blocker(
         KC_GRV,  KC_1,      KC_2,       KC_3,    KC_4,    KC_5,    KC_6,    KC_7,     KC_8,    KC_9,      KC_0,     KC_MINS, KC_EQL,  KC_BSPC, KC_HOME,
         KC_TAB,  KC_Q,      KC_W,       KC_E,    KC_R,    KC_T,    KC_Y,    U_UMLT,   KC_I,    O_UMLT,    KC_P,     KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,
         CTL_ESC, A_UMLT,    S_UMLT,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,     KC_K,    KC_L,      KC_SCLN,  KC_QUOT,          KC_ENT,  KC_PGUP,
@@ -105,11 +130,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL, KC_LGUI,   KC_LALT,                            KC_SPC,                        KC_RALT,   MO_FUNC,           KC_LEFT, KC_DOWN, KC_RGHT
     ),
     [_FUNCTION] = LAYOUT_65_ansi_blocker(
-        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_END,
-        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, TG_NUMP, KC_MUTE,
-        KC_CAPS, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU,
-        _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG, _______, _______, _______, _______,          KC_PGUP, KC_VOLD,
-        _______, _______, _______,                            HK_COSL,                            _______, _______, KC_HOME, KC_PGDN, KC_END
+        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,    KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_END,
+        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO, U_T_AGCR, _______, KC_PSCR, KC_SLCK, KC_PAUS, TG_NUMP, KC_MUTE,
+        KC_CAPS, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, DEF_EN,   DEF_DE,   _______, _______, _______,          _______, KC_VOLU,
+        _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG,  _______,  _______, _______, _______,          KC_PGUP, KC_VOLD,
+        _______, _______, _______,                            HK_COSL,                              _______, _______, KC_HOME, KC_PGDN, KC_END
     ),
     [_NUMPAD] = LAYOUT_65_ansi_blocker(
         _______, _______, _______, _______, _______, _______, _______, _______, KC_PSLS, KC_PAST, KC_PMNS, _______, _______, _______, _______,
@@ -149,6 +174,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             clear_keyboard();
             reset_oneshot_layer();
             return true;
+        // case DEF_DE:
+        //     if (layer_state_is(EN_LAYOUT)) {
+        //         layer_off(EN_LAYOUT);
+        //         layer_on(DE_LAYOUT);
+        //         set_single_persistent_default_layer(DE_LAYOUT);
+        //     }
+        //     return true;
+        // case DEF_EN:
+        //     if (layer_state_is(DE_LAYOUT)) {
+        //         layer_off(DE_LAYOUT);
+        //         layer_on(EN_LAYOUT);
+        //         set_single_persistent_default_layer(EN_LAYOUT);
+        //     }
+        //     return true;
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
                 TOGGLE_FLAG_AND_PRINT(usb_extra_manual, "USB extra port manual mode");
@@ -232,6 +271,7 @@ void each_umlaut_tap(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 // Registers the key to be used depending on the nunber of tabs
+// register_code16() sends the key press to the computer
 void dance_umlaut_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
         // Depending on pressed modifiers registered key will be equally modified
@@ -250,6 +290,7 @@ void dance_umlaut_finished(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 // After the tap dancing is done the registered key will be replaced by the defined tab dance key
+// unrigesiter_code16() sends the key relesase signal to the computer
 void dance_umlaut_reset(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) { 
         if (my_mod_key_state.pressed && (my_mod_key_state.tracked_key == KC_LSFT || my_mod_key_state.tracked_key == KC_RSFT)) { 

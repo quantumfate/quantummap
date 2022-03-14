@@ -1,12 +1,14 @@
 # Welcome to Quantumfate keymap
 
-## QWERTY Layer
+## EN_LAYOUT Layer
 
-- default active layer
+- default active layer when typing english
+- default layer in persistent storage
 
 ### Special keys
 
 - **Ctrl/Esc:** Tap sends escape, hold sends ctrl
+- **Func:** Activate [FUNCTION](#function) Layer on hold
 - **A/Ä:** Tapping once sends A, double tapping sends Ä
 - **U/Ü:** Tapping once sends U, double tapping sends Ü
 - **O/Ö:** Tapping once sends O, double tapping sends Ö
@@ -36,9 +38,47 @@
 └─────────┴─────────┴─────────┴───────────────────────────────────────────────┴─────────┴─────────┴──┴───────┴───────┴───────┘
 ```
 
+## DE_LAYOUT Layer
+
+- default active layer when typing german
+
+### Special keys
+
+- **Ctrl/Esc:** Tap sends escape, hold sends ctrl
+- **Func:** Activate [FUNCTION](#function) Layer on hold
+
+```
+┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬────────────┬───────┐
+│       │       │       │       │       │       │       │       │       │       │       │       │       │            │       │
+│   `   │   1   │   2   │   3   │   4   │   5   │   6   │   7   │   8   │   9   │   0   │   -   │   =   │ BackSpace  │ Home  │
+│       │       │       │       │       │       │       │       │       │       │       │       │       │            │       │
+├───────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬─────────┼───────┤
+│          │       │       │       │       │       │       │       │       │       │       │       │       │         │       │
+│    Tab   │   Q   │   W   │   E   │   R   │   T   │   Y   │   U   │   I   │   O   │   P   │   [   │   ]   │    \    │  Del  │
+│          │       │       │       │       │       │       │       │       │       │       │       │       │         │       │
+├──────────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─────────┼───────┤
+│            │       │       │       │       │       │       │       │       │       │       │       │               │       │
+│  Ctrl/Esc  │   A   │   S   │   D   │   F   │   G   │   H   │   J   │   K   │   L   │   ;   │   '   │    Return     │ PgUp  │
+│            │       │       │       │       │       │       │       │       │       │       │       │               │       │
+├────────────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴───────┬───────┼───────┤
+│               │       │       │       │       │       │       │       │       │       │       │            │       │       │
+│     Shift     │   Z   │   X   │   C   │   V   │   B   │   N   │   M   │   ,   │   .   │   /   │   Shift    │  Up   │ PgDn  │
+│               │       │       │       │       │       │       │       │       │       │       │            │       │       │
+├─────────┬─────┴───┬───┴─────┬─┴───────┴───────┴───────┴───────┴───────┴─────┬─┴───────┼───────┴─┬──┬───────┼───────┼───────┤
+│         │         │         │                                               │         │         │▒▒│       │       │       │
+│  Ctrl   │   GUI   │   Alt   │                     Space                     │   Alt   │  Func   │▒▒│ Left  │ Down  │ Right │
+│         │         │         │                                               │         │         │▒▒│       │       │       │
+└─────────┴─────────┴─────────┴───────────────────────────────────────────────┴─────────┴─────────┴──┴───────┴───────┴───────┘
+```
+
 ## FUNCTION Layer
 
-- hold ```Func``` to activate layer
+- Layer stays active when holding ```Func```
+
+### Special keys
+
+- **EN LAYER:** Activates [EN_LAYOUT Layer](#en-layout-layer)
+- **DE LAYER:** Activates [DE_LAYOUT Layer](#de-layout-layer)
 ```
 ┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬────────────┬───────┐
 │       │       │       │       │       │       │       │       │       │       │       │       │       │            │       │
@@ -49,12 +89,12 @@
 │          │ Speed │  Val  │ Speed │  Hue  │  Sat  │       │  Port │  GCR  │       │ PrtSc │ ScrLk │ Pause │ NumPad  │ Mute  │
 │          │   -   │   +   │   +   │   +   │   +   │       │       │       │       │       │       │       │         │       │
 ├──────────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─┬─────┴─────────┼───────┤
-│            │  RGB  │  RGB  │  RGB  │  RGB  │  RGB  │       │       │       │ (Mac) │       │       │               │       │
-│  CapsLock  │  Mode │  Val  │  Mode │  Hue  │  Sat  │       │       │       │ Lock  │       │       │               │ Vol+  │
+│            │  RGB  │  RGB  │  RGB  │  RGB  │  RGB  │       │  EN   │  DE   │       │       │       │               │       │
+│  CapsLock  │  Mode │  Val  │  Mode │  Hue  │  Sat  │       │ LAYER │ LAYER │       │       │       │               │ Vol+  │
 │            │   -   │   -   │   +   │   -   │   -   │       │       │       │       │       │       │               │       │
 ├────────────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴──┬────┴───────┬───────┼───────┤
 │               │  RGB  │       │       │       │       │ 6KRO/ │       │       │       │       │            │       │       │
-│               │ On/Off│       │       │       │Restart│ NKRO  │ Debug │       │       │ Layout│            │ PgUp  │ Vol-  │
+│               │ On/Off│       │       │       │Restart│ NKRO  │ Debug │       │       │       │            │ PgUp  │ Vol-  │
 │               │       │       │       │       │       │       │       │       │       │       │            │       │       │
 ├─────────┬─────┴───┬───┴─────┬─┴───────┴───────┴───────┴───────┴───────┴─────┬─┴───────┼───────┴─┬──┬───────┼───────┼───────┤
 │         │         │         │                                               │         │         │▒▒│       │       │       │
