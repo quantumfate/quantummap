@@ -1,6 +1,6 @@
 # Welcome to Quantumfate keymap
 
-## EN_LAYOUT Layer
+## EN LAYOUT Layer
 
 - default active layer when typing english
 - default layer in persistent storage
@@ -38,7 +38,7 @@
 └─────────┴─────────┴─────────┴───────────────────────────────────────────────┴─────────┴─────────┴──┴───────┴───────┴───────┘
 ```
 
-## DE_LAYOUT Layer
+## DE LAYOUT Layer
 
 - default active layer when typing german
 
