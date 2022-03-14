@@ -9,10 +9,6 @@
 
 - **Ctrl/Esc:** Tap sends escape, hold sends ctrl
 - **Func:** Activate [FUNCTION](#function-layer) Layer on hold
-- **A/Ä:** Tapping once sends A, double tapping sends Ä
-- **U/Ü:** Tapping once sends U, double tapping sends Ü
-- **O/Ö:** Tapping once sends O, double tapping sends Ö
-- **S/ß:** Tapping once sends S, double tapping sends ß
 
 ```
 ┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬────────────┬───────┐
@@ -46,6 +42,11 @@
 
 - **Ctrl/Esc:** Tap sends escape, hold sends ctrl
 - **Func:** Activate [FUNCTION](#function-layer) Layer on hold
+
+- **A/Ä:** Tapping once sends A, double tapping sends Ä
+- **U/Ü:** Tapping once sends U, double tapping sends Ü
+- **O/Ö:** Tapping once sends O, double tapping sends Ö
+- **S/ß:** Tapping once sends S, double tapping sends ß
 
 ```
 ┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬────────────┬───────┐
